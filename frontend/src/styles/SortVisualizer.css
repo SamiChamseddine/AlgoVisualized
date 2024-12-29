@@ -1,0 +1,135 @@
+/* SortingVisualizer.css */
+
+/* Reset some default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #000000;
+  color: #333;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Main container */
+.container-og {
+  display: flex;
+  justify-content: space-between; /* Optional: Space the items evenly */
+}
+
+.container {
+  padding: 0;
+  background: linear-gradient(135deg, #def10b, #000000);
+  border-radius: 10px;
+  width: 100%;
+  max-width: 1000px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+h1 {
+  color: #000000;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Sorting bars container */
+.sorting-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 400px;
+  overflow-x: auto;
+  border-radius: 8px;
+  background-color: #1a1a1a;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  margin-bottom: 30px;
+  padding: 0px;
+  position: relative;
+}
+
+/* Individual bars */
+.bar {
+  width: calc(800px / var(--array-length));
+  height: var(--bar-height);
+  background-color: var(--background-color, #c30493);
+  margin: 0 0.1px;
+  border-radius: 5px;
+  transition: height 0.3s ease, background-color 0.3s ease;
+}
+
+/* Enhanced highlight for sorting bars */
+.bar.highlight {
+  background-color: #ff6347; /* Brighter color for highlighted bars */
+  box-shadow: 0 0 10px rgba(255, 99, 71, 0.6); /* Glow effect */
+  border-radius: 5px; /* Smooth corners */
+  border: 2px solid #d63a3a; /* Red border to make highlighted bars stand out */
+}
+
+
+/* Controls (buttons and dropdown) */
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.controls button,
+.controls select {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.controls button:disabled,
+.controls select:disabled {
+  background-color: #dcdcdc;
+  cursor: not-allowed;
+}
+
+.controls button {
+  background-color: #28a745;
+  color: white;
+}
+
+.controls button:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+}
+
+.controls button:active {
+  transform: translateY(1px);
+}
+
+.controls select {
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+
+.controls select:hover {
+  border-color: #888;
+}
+
+.controls select:focus {
+  outline: none;
+  border-color: #0056b3;
+}
+
+/* Animation for button */
+.controls button:focus {
+  outline: none;
+  box-shadow: 0 0 5px #ff6347;
+}
