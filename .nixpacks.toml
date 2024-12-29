@@ -1,0 +1,14 @@
+[phases.build]
+commands = [
+  "cd frontend && npm install && npm run build",
+  "cd ../backend && pip install -r requirements.txt"
+]
+
+[phases.start]
+commands = [
+  "cd backend && gunicorn backend.wsgi:application --bind 0.0.0.0:8000"
+]
+
+[static]
+path = "frontend/dist"
+destination = "/app/static"
