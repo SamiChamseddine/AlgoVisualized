@@ -24,7 +24,7 @@ urlpatterns = [
     path("api/token/refresh/", TokenRefreshView.as_view(), name="refresh"),
     path("api-auth/", include("rest_framework.urls")),
     path("api/", include("api.urls")),
-    
+    path("logout/", serve_react_app),
     # Serve the React app for all other routes (catch-all route for client-side routing)
     re_path(r'^.*$', serve_react_app), # This will catch all non-API requests and serve the React app
 ]
