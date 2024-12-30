@@ -44,7 +44,7 @@ REST_FRAMEWORK = {
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'frontend' / 'dist',  # Correct path to the React build directory
+    BASE_DIR / 'static',  # Correct path to the React build directory
 ]
 
 
