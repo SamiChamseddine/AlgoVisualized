@@ -8,8 +8,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Serve the React app for all non-API requests
 def serve_react_app(request, path=''):
-    dist_path = os.path.join(BASE_DIR, 'frontend', 'dist', 'index.html')  # Path to dist/index.html
-    return render(request, dist_path) # Ensure this is the correct path to your React app's index.html
+    dist_path = os.path.join(BASE_DIR, 'frontend', 'dist', 'index.html')
+    return render(request, dist_path)  # Serve the React app's index.html
 
 urlpatterns = [
     path('admin/', admin.site.urls),
