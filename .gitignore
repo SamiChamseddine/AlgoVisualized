@@ -12,17 +12,7 @@ venv/
 env/
 newenv/
 
-# Django-specific
-*.log
-*.pot
-*.pyc
-*.db
-*.sqlite3
-*.tar.gz
 
-# Media and Static files
-media/
-static/
 
 # Secrets and configuration
 *.env
@@ -34,14 +24,4 @@ npm-debug.log
 yarn-debug.log
 yarn-error.log
 
-# Build outputs
-/dist
-/build
 
-# IDEs and Editors
-.vscode/
-.idea/
-
-# OS-specific files
-.DS_Store
-Thumbs.db
