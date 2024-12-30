@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   base: '/',  // Serve the app from the root
   build: {
-    outDir: '../backend/static',  // Output to the static folder in the Django backend
+    outDir: 'dist',  // Output to the static folder in the Django backend
+    emptyOutDir: true,
   },
 });
