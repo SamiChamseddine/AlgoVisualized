@@ -16,15 +16,14 @@ def serve_react_app(request, path=''):
         return HttpResponse(f.read())
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    
-    # API routes
+    # API routes first
     path("api/user/register/", CreateUserView.as_view(), name="register"),
     path("api/token/", TokenObtainPairView.as_view(), name="get_token"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="refresh"),
     path("api-auth/", include("rest_framework.urls")),
     path("api/", include("api.urls")),
-    path("logout/", serve_react_app),
-    # Serve the React app for all other routes (catch-all route for client-side routing)
-    re_path(r'^.*$', serve_react_app), # This will catch all non-API requests and serve the React app
+    
+    # Serve the React app for other routes (including /logout) 
+    # Ensure this catch-all route comes after API routes
+    re_path(r'^.*$', serve_react_app),  # This will serve the React app for all non-API requests
 ]
