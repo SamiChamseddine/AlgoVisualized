@@ -169,7 +169,7 @@ function SortVisualizer() {
           {array.map((value, index) => (
             <div key={index}>
               <div>
-                {array.length < 20 && (
+                {array.length <= 20 && (
                   <span className="bar-value">{value}</span>
                 )}
               </div>
