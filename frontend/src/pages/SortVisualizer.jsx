@@ -13,6 +13,7 @@ import msdRadixSort from "../utilities/msdRadixSort";
 import timSort from "../utilities/timSort";
 import "../styles/SortVisualizer.css";
 
+
 function SortVisualizer() {
   const [array, setArray] = useState([]);
   const [auxArray, setAuxArray] = useState([]);
@@ -38,7 +39,7 @@ function SortVisualizer() {
   const generateRandomArray = useCallback(() => {
     const randomArray = Array.from(
       { length: arrayLength },
-      () => Math.floor(Math.random() * 150) + 1
+      () => Math.floor(Math.random() * 100) + 1
     );
     setArray(randomArray);
     setAuxArray([...randomArray]); // store the unsorted version in auxArray
@@ -120,24 +121,47 @@ function SortVisualizer() {
 
   return (
     <div className="container-og">
-      <div className="controls">
-        <select value={speed} onChange={(e) => setSpeed(e.target.value)}>
-          <option value="Fast">Fast</option>
-          <option value="Intermediate">Intermediate</option>
-          <option value="Slow">Slow</option>
-        </select>
-      </div>
-      <div className="controls">
-        <select
-          value={arrayLength}
-          onChange={(e) => setArrayLength(Number(e.target.value))}
-        >
-          <option value={1000}>1000 elements</option>
-          <option value={500}>500 elements</option>
-          <option value={100}>100 elements</option>
-          <option value={20}>20 elements</option>
-          <option value={5}>5 elements</option>
-        </select>
+      <div style={{ justifyContent: "center" }}>
+        <div className="controls">
+          <select value={speed} onChange={(e) => setSpeed(e.target.value)}>
+            <option value="Fast">Fast</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Slow">Slow</option>
+          </select>
+        </div>
+
+        <div className="controls">
+          <select
+            value={arrayLength}
+            onChange={(e) => setArrayLength(Number(e.target.value))}
+          >
+            <option value={1000}>1000 elements</option>
+            <option value={500}>500 elements</option>
+            <option value={100}>100 elements</option>
+            <option value={20}>20 elements</option>
+            <option value={5}>5 elements</option>
+          </select>
+        </div>
+        <div className="controls">
+          <select
+            value={selectedAlgorithm}
+            onChange={(e) => setSelectedAlgorithm(e.target.value)}
+            disabled={isSorting}
+          >
+            <option value="Bubble Sort">Bubble Sort</option>
+            <option value="Selection Sort">Selection Sort</option>
+            <option value="Insertion Sort">Insertion Sort</option>
+            <option value="Merge Sort">Merge Sort</option>
+            <option value="Quick Sort">Quick Sort</option>
+            <option value="Heap Sort">Heap Sort</option>
+            <option value="Radix Sort">Radix Sort</option>
+            <option value="Shell Sort">Shell Sort</option>
+            <option value="Counting Sort">Counting Sort</option>
+            <option value="LSD Radix Sort">LSD Radix</option>
+            <option value="MSD Radix Sort">MSD Radix</option>
+            <option value="Tim Sort">Tim Sort</option>
+          </select>
+        </div>
       </div>
       <div className="container">
         <h1>{selectedAlgorithm} Visualizer</h1>
@@ -170,24 +194,6 @@ function SortVisualizer() {
             <h3>Comparisons: {comparisonCount}</h3>
             <h3>Sort Time: {sortTime.toFixed(2)}ms</h3>
           </div>
-          <select
-            value={selectedAlgorithm}
-            onChange={(e) => setSelectedAlgorithm(e.target.value)}
-            disabled={isSorting}
-          >
-            <option value="Bubble Sort">Bubble Sort</option>
-            <option value="Selection Sort">Selection Sort</option>
-            <option value="Insertion Sort">Insertion Sort</option>
-            <option value="Merge Sort">Merge Sort</option>
-            <option value="Quick Sort">Quick Sort</option>
-            <option value="Heap Sort">Heap Sort</option>
-            <option value="Radix Sort">Radix Sort</option>
-            <option value="Shell Sort">Shell Sort</option>
-            <option value="Counting Sort">Counting Sort</option>
-            <option value="LSD Radix Sort">LSD Radix</option>
-            <option value="MSD Radix Sort">MSD Radix</option>
-            <option value="Tim Sort">Tim Sort</option>
-          </select>
           <div>
             <button onClick={generateRandomArray} disabled={isSorting}>
               Generate New Array

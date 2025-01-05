@@ -1,6 +1,3 @@
-/* SortingVisualizer.css */
-
-/* Reset some default styles */
 * {
   margin: 0;
   padding: 0;
@@ -10,9 +7,7 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #000000;
-  color: #333;
-  height: 100vh;
-  display: flex;
+  color: #fafafa;
   justify-content: center;
   align-items: center;
 }
@@ -20,12 +15,12 @@ body {
 /* Main container */
 .container-og {
   display: flex;
-  justify-content: space-between; /* Optional: Space the items evenly */
+  justify-content: space-between;
+  align-items: center;
 }
 
 .container {
-  padding: 0;
-  background: linear-gradient(135deg, #def10b, #000000);
+  padding: 5px;
   border-radius: 10px;
   width: 100%;
   max-width: 1000px;
@@ -34,9 +29,9 @@ body {
 }
 
 h1 {
-  color: #000000;
+  color: #ffffff;
   font-size: 2.5rem;
-  margin-bottom: 20px;
+  margin-bottom: 2px;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -46,12 +41,10 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  height: 400px;
+  height: 270px;
   overflow-x: auto;
-  border-radius: 8px;
   background-color: #1a1a1a;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  margin-bottom: 30px;
   padding: 0px;
   position: relative;
 }
@@ -62,18 +55,16 @@ h1 {
   height: var(--bar-height);
   background-color: var(--background-color, #c30493);
   margin: 0 0.1px;
-  border-radius: 5px;
   transition: height 0.3s ease, background-color 0.3s ease;
 }
 
-/* Enhanced highlight for sorting bars */
+/* Highlight bars */
 .bar.highlight {
-  background-color: #ff6347; /* Brighter color for highlighted bars */
-  box-shadow: 0 0 10px rgba(255, 99, 71, 0.6); /* Glow effect */
-  border-radius: 5px; /* Smooth corners */
-  border: 2px solid #d63a3a; /* Red border to make highlighted bars stand out */
+  background-color: #ff6347; 
+  box-shadow: 0 0 10px rgba(255, 99, 71, 0.6); 
+  border-radius: 5px; 
+  border: 2px solid #d63a3a; 
 }
-
 
 /* Controls (buttons and dropdown) */
 .controls {
@@ -128,7 +119,6 @@ h1 {
   border-color: #0056b3;
 }
 
-/* Animation for button */
 .controls button:focus {
   outline: none;
   box-shadow: 0 0 5px #ff6347;

@@ -5,7 +5,8 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
-import SortVisualizer from "./pages/SortVisualizer";  
+import SortVisualizer from "./pages/SortVisualizer"; 
+ 
 
 function Logout() {
   localStorage.clear();
@@ -22,7 +23,7 @@ function App() {
     <HashRouter>
       <Routes>
         <Route
-          path="/"
+          path="/Home"
           element={
             <ProtectedRoute>
               <Home />

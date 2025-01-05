@@ -3,23 +3,49 @@ const heapSort = async (
   updateArray,
   highlightIndices,
   delay,
-  updateSkip
+  updateSkip,
+  setSwapCount,
+  setSortTime,
+  setArrayAccesses,
+  setComparisonCount
 ) => {
+  const start = performance.now();
+  let swapCount = 0;
+  let comparisonCount = 0;
+  let arrayAccess = 0;
+
   const heapify = async (arr, n, i) => {
     let largest = i;
     const left = 2 * i + 1;
     const right = 2 * i + 2;
 
-    if (left < n && arr[left] > arr[largest]) largest = left;
-    if (right < n && arr[right] > arr[largest]) largest = right;
+    if (left < n) {
+      comparisonCount++;
+      setComparisonCount(comparisonCount);
+      if (arr[left] > arr[largest]) largest = left;
+      arrayAccess += 1; // Accessing the left element
+      setArrayAccesses(arrayAccess);
+    }
+    
+    if (right < n) {
+      comparisonCount++;
+      setComparisonCount(comparisonCount);
+      if (arr[right] > arr[largest]) largest = right;
+      arrayAccess += 1; // Accessing the right element
+      setArrayAccesses(arrayAccess);
+    }
 
     if (largest !== i) {
       highlightIndices([i, largest]); // Highlight the indices being compared
       [arr[i], arr[largest]] = [arr[largest], arr[i]]; // Swap elements
+      arrayAccess += 2; // Two accesses: one for each element in the swap
+      setArrayAccesses(arrayAccess);
+      
+      swapCount++;
+      setSwapCount(swapCount);
 
       // Throttle updates
-      updateCounter++;
-      if (updateCounter % updateSkip === 0) {
+      if (swapCount % updateSkip === 0) {
         updateArray([...arr]);
         await new Promise((resolve) => setTimeout(resolve, delay));
       }
@@ -39,11 +65,17 @@ const heapSort = async (
   // Extract elements from the heap
   for (let i = tempArray.length - 1; i > 0; i--) {
     // Swap the root (maximum value) with the last element
+    highlightIndices([0, i]);
     [tempArray[0], tempArray[i]] = [tempArray[i], tempArray[0]];
+
+    arrayAccess += 2; // Two accesses: one for each element in the swap
+    setArrayAccesses(arrayAccess);
+    swapCount++;
+    setSwapCount(swapCount);
 
     // Throttle updates
     updateCounter++;
-    if (updateCounter % 50 === 0) {
+    if (updateCounter % updateSkip === 0) {
       updateArray([...tempArray]);
       await new Promise((resolve) => setTimeout(resolve, delay));
     }
@@ -55,5 +87,8 @@ const heapSort = async (
   // Final update and clear highlights
   updateArray([...tempArray]);
   highlightIndices([-1, -1]);
+
+  setSortTime(performance.now() - start);
 };
+
 export default heapSort;
