@@ -17,7 +17,7 @@ import "../styles/SortVisualizer.css";
 function SortVisualizer() {
   const [array, setArray] = useState([]);
   const [auxArray, setAuxArray] = useState([]);
-  const [arrayLength, setArrayLength] = useState(10);
+  const [arrayLength, setArrayLength] = useState(1000);
   const [currentIndices, setCurrentIndices] = useState([-1, -1]);
   const [isSorting, setIsSorting] = useState(false);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState("Bubble Sort");
