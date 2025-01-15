@@ -23,7 +23,7 @@ function App() {
     <HashRouter>
       <Routes>
         <Route
-          path="/Home"
+          path="/"
           element={
             <ProtectedRoute>
               <Home />
