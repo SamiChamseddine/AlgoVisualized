@@ -1,13 +1,12 @@
-import { useState, useEffect } from "react";
-import api from "../api";
 import SortVisualizer from "./SortVisualizer";
-import MainNavbar from "./MainNavbar";
-import "../styles/Home.css";
+import Navbar from "./Navbar"
 
 function Home() {
   return (
     <>
-        <MainNavbar />
+      <div>
+        <Navbar/>  
+      </div> 
       <div>
         <SortVisualizer />
       </div>
