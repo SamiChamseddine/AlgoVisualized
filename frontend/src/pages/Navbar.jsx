@@ -1,4 +1,3 @@
-import algoVisualized from '../assets/icons/algoVisualized.webp';
 
 const Navbar = () => {
   return (
@@ -8,7 +7,7 @@ const Navbar = () => {
           {/* Logo and Title */}
           <div className="flex items-center space-x-3">
             <img
-              src={algoVisualized}
+              src="/icon/algoVisualized.webp"
               alt="AlgoVisualized Icon"
               className="h-16 w-16 object-contain rounded-lg shadow-lg border-2 border-blue-500"
             />
