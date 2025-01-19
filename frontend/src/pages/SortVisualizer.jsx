@@ -10,7 +10,7 @@ const SortVisualizer = () => {
   const [comparisons, setComparisons] = useState(0);
   const [highlightedIndices, setHighlightedIndices] = useState([]);
   const [delay, setDelay] = useState(0.01);
-  const [throttle, setThrottle] = useState(1);
+  const [throttle, setThrottle] = useState(10);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState("bubble_sort");
   const [displayName, setDisplayName] = useState("Bubble Sort");
   const [size, setSize] = useState(500);
