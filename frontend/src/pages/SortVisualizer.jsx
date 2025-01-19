@@ -18,7 +18,7 @@ const SortVisualizer = () => {
   const [isSorting, setIsSorting] = useState(false);
 
   useEffect(() => {
-    const ws = new WebSocket("ws://127.0.0.1:8000/ws/sort/");
+    const ws = new WebSocket("wss://algoVisualized/ws/sort/");
     setSocket(ws);
 
     ws.onopen = () => {
