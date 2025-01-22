@@ -13,7 +13,7 @@ const Home = () => {
   return (
     <div>
       <Navbar onSelect={handleSelect} />
-      <div style={{ padding: "0px" }}>
+      <div  className="bg-black">
         {selectedVisualizer === "home" && <div>Home Page Content</div>}
         {selectedVisualizer === "sort" && <SortVisualizer />}
         {selectedVisualizer === "curve" && <CurveFitVisualization />}
