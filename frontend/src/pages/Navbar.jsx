@@ -1,5 +1,13 @@
+import React, { useState } from "react";
 
-const Navbar = () => {
+const Navbar = ({ onSelect }) => {
+  const [active, setActive] = useState("home");
+
+  const handleClick = (visualizer) => {
+    setActive(visualizer);
+    onSelect(visualizer); // Trigger the parent's handler
+  };
+
   return (
     <nav className="bg-gray-800 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -21,21 +29,30 @@ const Navbar = () => {
           <div className="hidden md:flex space-x-4">
             <a
               href="#"
-              className="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700"
+              onClick={() => handleClick("home")}
+              className={`px-3 py-2 rounded-md text-sm font-medium ${
+                active === "home" ? "bg-gray-700" : "hover:bg-gray-700"
+              }`}
             >
               Home
             </a>
             <a
               href="#"
-              className="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700"
+              onClick={() => handleClick("sort")}
+              className={`px-3 py-2 rounded-md text-sm font-medium ${
+                active === "sort" ? "bg-gray-700" : "hover:bg-gray-700"
+              }`}
             >
-              About
+              Sort Visualizer
             </a>
             <a
               href="#"
-              className="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700"
+              onClick={() => handleClick("curve")}
+              className={`px-3 py-2 rounded-md text-sm font-medium ${
+                active === "curve" ? "bg-gray-700" : "hover:bg-gray-700"
+              }`}
             >
-              Contact
+              Curve Fit Visualizer
             </a>
           </div>
 

@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SortVisualizer from "./pages/SortVisualizer"; 
+import CurveFitVisualization from "./pages/CurveFitVisualization";
  
 
 function Logout() {
@@ -23,10 +24,10 @@ function App() {
     <HashRouter>
       <Routes>
         <Route
-          path="/"
+          path="/fit-visualizer"
           element={
             <ProtectedRoute>
-              <Home />
+              <CurveFitVisualization />
             </ProtectedRoute>
           }
         />
@@ -39,6 +40,14 @@ function App() {
             </ProtectedRoute>
           }
           /> 
+          <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<RegisterAndLogout />} />
