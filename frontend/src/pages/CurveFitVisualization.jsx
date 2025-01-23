@@ -3,7 +3,7 @@ import Plot from "react-plotly.js";
 
 const CurveFitVisualization = () => {
   const [dataset, setDataset] = useState({ x: [], y: [] });
-  const datasetRef = useRef(dataset); // Ref to keep track of the latest dataset
+  const datasetRef = useRef(dataset); 
   const [statistics, setStatistics] = useState({ mse: 0, r_squared: 0 });
   const [fittedCurve, setFittedCurve] = useState({ x: [], y: [] });
   const [progress, setProgress] = useState(0);
@@ -29,24 +29,21 @@ const CurveFitVisualization = () => {
       const data = JSON.parse(event.data);
       console.log(data);
 
-      // Handle dataset received
       if (data.dataset) {
         const newDataset = {
           x: [...data.dataset.x],
           y: [...data.dataset.y],
         };
         setDataset(newDataset);
-        datasetRef.current = newDataset; // Update ref
+        datasetRef.current = newDataset; 
         setFittedCurve({ x: [], y: [] });
         setProgress(0);
       }
 
-      // Handle progress updates and fitted curve updates
       if (data.progress !== undefined) {
         setProgress(data.progress);
 
         if (data.coefficients) {
-          // Use datasetRef to access the latest dataset
           const fittedY = datasetRef.current.x.map((xi) =>
             data.coefficients.reduce(
               (sum, coeff, i) =>
@@ -62,12 +59,10 @@ const CurveFitVisualization = () => {
         }
       }
 
-      // Handle fitting completion
       if (data.isFitted) {
         setIsFitting(false);
       }
 
-      // Handle errors during fitting
       if (data.error) {
         console.error("Error during fitting:", data.error);
         setIsFitting(false);

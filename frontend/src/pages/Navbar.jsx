@@ -5,7 +5,7 @@ const Navbar = ({ onSelect }) => {
 
   const handleClick = (visualizer) => {
     setActive(visualizer);
-    onSelect(visualizer); // Trigger the parent's handler
+    onSelect(visualizer); 
   };
 
   return (

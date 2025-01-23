@@ -26,7 +26,7 @@ const SortVisualizer = () => {
       ws.send(
         JSON.stringify({
           action: "generate_array",
-          size: size, // or any size you want to use for the array
+          size: size, 
         })
       );
     };
@@ -39,7 +39,6 @@ const SortVisualizer = () => {
       const data = JSON.parse(event.data);
       console.log("WebSocket message received:", data);
 
-      // Only set the state if it's different
       if (data.isSorted !== undefined && data.isSorted !== isSorted) {
         setIsSorted(data.isSorted);
         setHighlightedIndices([]);
@@ -50,7 +49,7 @@ const SortVisualizer = () => {
         const arrayCopy = [...data.array];
         setArray(arrayCopy);
         if (arrayOriginal.length === 0 && !isSorted) {
-          setArrayOriginal(arrayCopy); // Set arrayOriginal only once if unsorted
+          setArrayOriginal(arrayCopy); 
         }
       }
 
@@ -67,7 +66,6 @@ const SortVisualizer = () => {
         setHighlightedIndices(data.highlightedIndices);
       }
       if (data.reset !== undefined && data.array !== undefined) {
-        // Reset to original state only when explicitly triggered
         setArray([...data.array]);
         setArrayAccesses(0);
         setSwaps(0);
@@ -87,7 +85,7 @@ const SortVisualizer = () => {
     return () => {
       ws.close();
     };
-  }, []); // Keep track of isSorted to ensure it doesn't reset the array after sorting.
+  }, []);
 
   const generateArray = () => {
     socket.send(
@@ -110,7 +108,6 @@ const SortVisualizer = () => {
     );
     setIsSorting(true);
   };
-  // Function to handle algorithm change
   const algorithmMap = {
     "Bubble Sort": "bubble_sort",
     "Quick Sort": "quick_sort",
@@ -131,7 +128,6 @@ const SortVisualizer = () => {
     setDisplayName(selectedDisplayName);
   };
   const resetVisualizer = () => {
-    // Optional: Inform the backend to reset
     if (socket) {
       socket.send(
         JSON.stringify({
@@ -166,7 +162,7 @@ const SortVisualizer = () => {
             }`}
             style={{
               height: `${value}px`,
-              margin: "0 0.1px", // Thin spacing for bars
+              margin: "0 0.1px", 
             }}
           ></div>
         ))}
@@ -227,7 +223,7 @@ const SortVisualizer = () => {
             <select
               value={Object.keys(algorithmMap).find(
                 (key) => algorithmMap[key] === selectedAlgorithm
-              )} // display name based on selected algorithm
+              )} 
               onChange={handleAlgorithmChange}
               className="bg-gray-800 text-white py-2 px-4 rounded shadow-lg w-full"
               disabled={isSorting}

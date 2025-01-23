@@ -22,37 +22,36 @@ ChartJS.register(
 );
 
 const CurveFittingChart = ({ dataset, fittedCurve, isFitting }) => {
-  // Prepare the datasets dynamically for the chart
+  
   const chartData = {
-    labels: dataset.x, // Use x-values as labels
+    labels: dataset.x, 
     datasets: [
       {
         label: "Data Points",
-        data: dataset.x.map((x, i) => ({ x, y: dataset.y[i] })), // Scatter points
+        data: dataset.x.map((x, i) => ({ x, y: dataset.y[i] })), 
         borderColor: "blue",
         backgroundColor: "blue",
         pointRadius: 2,
         pointHoverRadius: 7,
-        showLine: false, // Points only
+        showLine: false, 
       },
       {
         label: "Fitted Curve",
-        data: fittedCurve.x.map((x, i) => ({ x, y: fittedCurve.y[i] })), // Line data
+        data: fittedCurve.x.map((x, i) => ({ x, y: fittedCurve.y[i] })), 
         borderColor: isFitting ? "red" : "green",
         borderWidth: 2,
         fill: false,
-        tension: 0, // No curve; make it a straight line
+        tension: 0, 
         showLine: true,
-        pointRadius: 0, // Remove points
-        pointHoverRadius: 0, // Remove hover effect on points
+        pointRadius: 0, 
+        pointHoverRadius: 0, 
       },
     ],
   };
 
-  // Chart options for a static and clean graph
   const options = {
     responsive: true,
-    maintainAspectRatio: true, // Allow the chart to fill its container
+    maintainAspectRatio: true,
     plugins: {
       legend: {
         labels: {
@@ -67,19 +66,19 @@ const CurveFittingChart = ({ dataset, fittedCurve, isFitting }) => {
     },
     scales: {
       x: {
-        type: "linear", // Linear scale for proper scatter visualization
+        type: "linear", 
         
-        min: Math.min(...dataset.x) , // Static range
+        min: Math.min(...dataset.x) , 
         max: Math.max(...dataset.x) + 20,
       },
       y: {
         
-        min: Math.min(...dataset.y) - 1, // Static range
+        min: Math.min(...dataset.y) - 1, 
         max: Math.max(...dataset.y) + 20,
       },
     },
     animation: {
-      duration: 100, // Faster updates for responsiveness
+      duration: 100, 
       easing: "easeInOutQuad",
     },
   };
@@ -88,11 +87,11 @@ const CurveFittingChart = ({ dataset, fittedCurve, isFitting }) => {
     <div
       style={{
         width: "1000px",
-        height: "500px", // Fixed dimensions for a static graph
+        height: "500px", 
         backgroundColor: "black",
         padding: "20px",
         borderRadius: "10px",
-        overflow: "hidden", // Prevent unwanted scrollbars
+        overflow: "hidden", 
       }}
     >
       <Line data={chartData} options={options} />

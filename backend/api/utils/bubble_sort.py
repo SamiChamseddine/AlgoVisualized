@@ -1,7 +1,7 @@
 # utils/sorting.py
 import asyncio
 
-# Async Bubble Sort Algorithm
+
 async def bubble_sort(arr, send_fn, delay, throttle):
     comparisons = 0
     arrayAccesses = 0
@@ -14,13 +14,13 @@ async def bubble_sort(arr, send_fn, delay, throttle):
             comparisons += 1
             arrayAccesses += 2
             if arr[j] > arr[j+1]:
-                arr[j], arr[j+1] = arr[j+1], arr[j]  # Swap
+                arr[j], arr[j+1] = arr[j+1], arr[j]  
                 arrayAccesses += 4
                 swaps += 2
 
-            # Send the data after each iteration (allow visualization update)
+            
             if i % throttle == 0:
                 await send_fn(arr, comparisons, arrayAccesses, swaps, highlighted_indices)
-                await asyncio.sleep(delay)  # Delay for visualization (non-blocking)
+                await asyncio.sleep(delay)  
 
     return arr, comparisons, arrayAccesses, swaps

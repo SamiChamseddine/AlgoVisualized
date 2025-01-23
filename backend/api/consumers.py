@@ -92,9 +92,9 @@ class SortingConsumer(AsyncWebsocketConsumer):
 class FittingConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         await self.accept()
-        self.dataset = {"x": [], "y": []}  # Initialize dataset
-        self.fitting_task = None          # Task to manage curve fitting
-        self.fitting_result = None        # Store the final fitting result
+        self.dataset = {"x": [], "y": []}  
+        self.fitting_task = None          
+        self.fitting_result = None        
 
     async def disconnect(self, close_code):
         print(f"Disconnected with code: {close_code}")
@@ -116,18 +116,15 @@ class FittingConsumer(AsyncWebsocketConsumer):
 
             elif data["action"] == "start_fitting":
                 method = data.get("method")
-                degree = data.get("degree", 1)  # Default to linear fitting
+                degree = data.get("degree", 1)  
                 delay = data.get("delay", 0.1)
 
-                # Cancel any ongoing fitting process
                 if self.fitting_task and not self.fitting_task.done():
                     self.fitting_task.cancel()
                 print(f"method: {method}")
-                # Start the new fitting process
                 self.fitting_task = asyncio.create_task(self.perform_fit(self.dataset, method, degree, delay))
 
             elif data["action"] == "reset":
-                # Reset the dataset and cancel any ongoing fitting process
                 if self.fitting_task and not self.fitting_task.done():
                     self.fitting_task.cancel()
                     self.fitting_task = None
@@ -138,7 +135,6 @@ class FittingConsumer(AsyncWebsocketConsumer):
     async def perform_fit(self, dataset, method, degree, delay):
         fitting_methods = {
             "polynomial": polynomial_fit,
-            # You can add more fitting methods here, e.g., "linear": linear_fit
         }
 
         fit_function = fitting_methods.get(method)
@@ -147,22 +143,19 @@ class FittingConsumer(AsyncWebsocketConsumer):
             return
 
         try:
-            # Call the selected fitting function
             final_coefficients = await fit_function(dataset, degree, self.send_fit_data, delay)
             
             if final_coefficients is not None:
-                self.fitting_result = final_coefficients  # Store the result
+                self.fitting_result = final_coefficients  
                 await self.send(json.dumps({"isFitted": True, "coefficients": final_coefficients.tolist()}))
             else:
                 await self.send(json.dumps({"error": "Fitting process failed, no coefficients returned"}))
 
         except asyncio.CancelledError:
-            # Handle cancellation gracefully
             await self.send(json.dumps({"message": "Fitting process cancelled"}))
 
 
     async def send_fit_data(self, progress, coefficients, mse, r_squared):
-        # Send intermediate fitting data to the frontend
         await self.send(json.dumps({
             "progress": progress,
             "coefficients": coefficients,
