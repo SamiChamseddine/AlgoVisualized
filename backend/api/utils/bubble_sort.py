@@ -7,7 +7,7 @@ async def bubble_sort(arr, send_fn, delay, throttle):
     arrayAccesses = 0
     swaps = 0
     steps = 0
-    batchsize = 0
+    batchsize = 1000
     highlighted_indices = []
     n = len(arr)
     for i in range(n):
