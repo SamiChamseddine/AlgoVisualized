@@ -6,6 +6,8 @@ async def bubble_sort(arr, send_fn, delay, throttle):
     comparisons = 0
     arrayAccesses = 0
     swaps = 0
+    steps = 0
+    batchsize = 0
     highlighted_indices = []
     n = len(arr)
     for i in range(n):
@@ -17,10 +19,10 @@ async def bubble_sort(arr, send_fn, delay, throttle):
                 arr[j], arr[j+1] = arr[j+1], arr[j]  
                 arrayAccesses += 4
                 swaps += 2
-
-            
-            if i % 5 == 0:
+            steps+=1
+            if steps >=batchsize:
                 await send_fn(arr, comparisons, arrayAccesses, swaps, highlighted_indices)
-                await asyncio.sleep(delay)  
+                await asyncio.sleep(delay)
+                steps = 0 
 
     return arr, comparisons, arrayAccesses, swaps
