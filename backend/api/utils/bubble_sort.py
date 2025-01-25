@@ -19,7 +19,7 @@ async def bubble_sort(arr, send_fn, delay, throttle):
                 swaps += 2
 
             
-            if i % throttle == 0:
+            if i % throttle == 10:
                 await send_fn(arr, comparisons, arrayAccesses, swaps, highlighted_indices)
                 await asyncio.sleep(delay)  
 
