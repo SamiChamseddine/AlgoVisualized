@@ -9,4 +9,10 @@ export default defineConfig({
     outDir: 'dist',  // Output to the static folder in the Django backend
     emptyOutDir: true,
   },
+  server: {
+    port: process.env.PORT || 3000,  // Use Railway's PORT or fallback to 3000
+  },
+  preview: {
+    port: process.env.PORT || 3000,  // Use Railway's PORT or fallback to 3000
+  },
 });
