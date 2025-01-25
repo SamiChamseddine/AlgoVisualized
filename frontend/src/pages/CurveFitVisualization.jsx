@@ -13,7 +13,7 @@ const CurveFitVisualization = () => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const ws = new WebSocket("wss://algovisualized.onrender.com/ws/fit/");
+    const ws = new WebSocket("wss://algovisualized-production.up.railway.app/ws/fit/");
     setSocket(ws);
 
     ws.onopen = () => {
