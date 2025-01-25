@@ -1,12 +1,15 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/',  // Serve the app from the root
+  base: '/', // Adjust if Django serves static files from a subpath
   build: {
-    outDir: 'dist',  // Output to the static folder in the Django backend
+    outDir: 'dist', // Ensure this aligns with Django's STATICFILES_DIRS
     emptyOutDir: true,
+  },
+  server: {
+    host: true, // Allow the server to be accessible externally
+    port: process.env.PORT || 3000, // Use Railway's dynamic PORT or default to 3000
   },
 });
