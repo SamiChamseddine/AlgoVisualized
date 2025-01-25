@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "ls -la dist && serve -s dist -l $PORT"
+    "start": "echo $PORT && serve -s dist -l $PORT"
     },
   "dependencies": {
     "@visx/xychart": "^3.12.0",
