@@ -8,7 +8,10 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "vite preview --port 3000"
+    "start": "vite preview --host 0.0.0.0 --port $PORT"
+    },
+  "engines": {
+    "node": ">=20.0.0"
     },
   "dependencies": {
     "@visx/xychart": "^3.12.0",
