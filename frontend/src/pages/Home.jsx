@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SortVisualizer from "./SortVisualizer";
 import CurveFitVisualization from "./CurveFitVisualization";
+import MainPage from "./MainPage";
 import Navbar from "./Navbar"
 
 const Home = () => {
@@ -14,7 +15,7 @@ const Home = () => {
     <div>
       <Navbar onSelect={handleSelect} />
       <div  className="bg-black">
-        {selectedVisualizer === "home" && <div>Home Page Content</div>}
+        {selectedVisualizer === "home" && <MainPage/>}
         {selectedVisualizer === "sort" && <SortVisualizer />}
         {selectedVisualizer === "curve" && <CurveFitVisualization />}
       </div>
