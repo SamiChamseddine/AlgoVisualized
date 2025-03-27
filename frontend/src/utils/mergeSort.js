@@ -11,21 +11,21 @@ const mergeSort = async (
   signal,
 ) => {
   const start = performance.now();
-  let swapCount = 0; // No swaps in merge sort, but we can track the movement of elements
+  let swapCount = 0; 
   let comparisonCount = 0;
   let arrayAccess = 0;
 
-  let updateCounter = 0; // Counter to control throttling
+  let updateCounter = 0; 
 
   const merge = async (left, right, leftStartIndex) => {
     let sorted = [];
-    let i = 0; // Pointer for left
-    let j = 0; // Pointer for right
+    let i = 0;
+    let j = 0; 
 
     while (i < left.length && j < right.length) {
       if (signal.aborted) {
         console.log("Sorting aborted");
-        return; // Exit the function if aborted
+        return; 
       }
       highlightIndices([leftStartIndex + i, leftStartIndex + left.length + j]); // Highlight current comparison
 
@@ -38,13 +38,13 @@ const mergeSort = async (
         sorted.push(right[j++]);
       }
 
-      arrayAccess += 1; // Accessing an element from left or right
+      arrayAccess += 1; 
       setArrayAccesses(arrayAccess);
 
-      // Increment the update counter and throttle updates
+    
       updateCounter++;
       if (updateCounter % updateSkip === 0) {
-        // Update only the part that changes
+        
         updateArray(prevArray => [
           ...prevArray.slice(0, leftStartIndex),
           ...sorted,
@@ -56,14 +56,11 @@ const mergeSort = async (
       }
     }
 
-    // Add remaining elements
     sorted = [...sorted, ...left.slice(i), ...right.slice(j)];
 
-    // Track accesses for remaining elements
     arrayAccess += left.slice(i).length + right.slice(j).length;
     setArrayAccesses(arrayAccess);
 
-    // Final update with the merged sorted array
     updateArray(prevArray => [
       ...prevArray.slice(0, leftStartIndex),
       ...sorted,
@@ -82,9 +79,8 @@ const mergeSort = async (
     return merge(left, right, startIndex);
   };
 
-  // Start the sorting process
   await mergeSortHelper(array, 0);
-  highlightIndices([-1, -1]); // Clear highlights
+  highlightIndices([-1, -1]); 
 
   setSortTime(performance.now() - start);
 };

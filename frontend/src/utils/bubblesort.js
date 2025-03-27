@@ -42,7 +42,7 @@ const bubbleSort = async (
       }
 
       // Update the array and add delay
-      if ((i * tempArray.length + j) % updateSkip === 0) {
+      if (((i * tempArray.length + j) % updateSkip === 0) & (delay != 0)) {
         updateArray([...tempArray]);
         await new Promise((resolve) => setTimeout(resolve, delay));
       }
@@ -51,7 +51,7 @@ const bubbleSort = async (
 
   // Reset highlighted indices and set final sort time
   highlightIndices([-1, -1]);
-  setSortTime(performance.now() - start);
+  if (delay === 0) setSortTime(performance.now() - start);
 };
 
 export default bubbleSort;

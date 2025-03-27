@@ -91,13 +91,30 @@ const SortVisualizer = () => {
     setIsSorting(true);
     setIsSorted(false);
     const speedOptions = {
-      Fast: { delay: 1, updateSkip: 100 },
+      Fast: { delay: 0.1, updateSkip: 100 },
       Intermediate: { delay: 10, updateSkip: 10 },
       Slow: { delay: 100, updateSkip: 1 },
     };
 
     const { delay, updateSkip } = speedOptions[speed];
-
+    try {
+      await algorithmMap[selectedAlgorithm](
+        [...array],
+        (newArray) => setArray(newArray),
+        (indices) => setHighlightedIndices(indices),
+        0,
+        1,
+        setSwapCount,
+        setSortTime,
+        setArrayAccesses,
+        setComparisonCount,
+        signal,
+      );
+      setIsSorted(() => (signal.aborted ? false : true));
+    } catch (error) {
+      console.error("Sorting error:", error);
+    }
+    setIsSorted(false);
     try {
       await algorithmMap[selectedAlgorithm](
         [...array],
@@ -109,7 +126,7 @@ const SortVisualizer = () => {
         setSortTime,
         setArrayAccesses,
         setComparisonCount,
-        signal
+        signal,
       );
       setIsSorted(() => (signal.aborted ? false : true));
     } catch (error) {

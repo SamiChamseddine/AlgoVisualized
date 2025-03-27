@@ -54,6 +54,15 @@ const Navbar = ({ onSelect }) => {
             >
               Curve Fit Visualizer
             </a>
+            <a
+              href="#"
+              onClick={() => handleClick("pathFind")}
+              className={`px-3 py-2 rounded-md text-sm font-medium ${
+                active === "pathFind" ? "bg-gray-700" : "hover:bg-gray-700"
+              }`}
+            >
+              Path Find Visualizer
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
