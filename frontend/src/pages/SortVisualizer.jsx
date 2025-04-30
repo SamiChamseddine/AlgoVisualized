@@ -35,6 +35,63 @@ const SortVisualizer = () => {
     "Counting Sort": countingSort,
   };
 
+  const algorithmDescriptions = {
+    "Bubble Sort": `
+  -> Time Complexity: O(n²) in worst/average case, O(n) when optimized on sorted array
+  -> Space Complexity: O(1)
+  -> Stable sorting algorithm
+  -> Repeatedly compares adjacent elements and swaps them if disordered
+  -> Largest elements "bubble up" to their correct position`,
+
+    "Selection Sort": `
+  -> Time Complexity: O(n²) in all cases
+  -> Space Complexity: O(1)
+  -> Not stable (may change order of equal elements)
+  -> Maintains sorted and unsorted subarrays
+  -> Always selects minimum element from unsorted portion`,
+
+    "Insertion Sort": `
+  -> Time Complexity: O(n²) in worst/average case, O(n) for nearly sorted data
+  -> Space Complexity: O(1)
+  -> Stable sorting algorithm
+  -> Builds final sorted array one element at a time
+  -> Efficient for small datasets or nearly sorted data`,
+
+    "Merge Sort": `
+  -> Time Complexity: O(n log n) in all cases
+  -> Space Complexity: O(n)
+  -> Stable sorting algorithm
+  -> Divide-and-conquer approach
+  -> Recursively splits array, sorts subarrays, then merges them`,
+
+    "Quick Sort": `
+  -> Time Complexity: O(n log n) average, O(n²) worst case
+  -> Space Complexity: O(log n) due to recursion
+  -> Not stable
+  -> Divide-and-conquer with pivot selection
+  -> Efficient for large datasets, cache-friendly`,
+
+    "Heap Sort": `
+  -> Time Complexity: O(n log n) in all cases
+  -> Space Complexity: O(1)
+  -> Not stable
+  -> Converts array to max-heap structure
+  -> Repeatedly extracts maximum element from heap`,
+
+    "Shell Sort": `
+  -> Time Complexity: O(n²) worst case, better for certain gap sequences
+  -> Space Complexity: O(1)
+  -> Not stable
+  -> Generalization of insertion sort
+  -> Sorts elements far apart first (using gap sequence)`,
+
+    "Counting Sort": `
+  -> Time Complexity: O(n + k) where k is range of input
+  -> Space Complexity: O(n + k)
+  -> Stable sorting algorithm
+  -> Non-comparison based sort
+  -> Effective when data range (k) is not significantly larger than number of items`,
+  };
   useEffect(() => {
     generateRandomArray();
   }, [arrayLength]);
@@ -91,30 +148,13 @@ const SortVisualizer = () => {
     setIsSorting(true);
     setIsSorted(false);
     const speedOptions = {
-      Fast: { delay: 0.1, updateSkip: 100 },
-      Intermediate: { delay: 10, updateSkip: 10 },
+      Extreme: { delay: 1, updateSkip: 100 },
+      Fast: { delay: 10, updateSkip: 10 },
+      Intermediate: { delay: 10, updateSkip: 5 },
       Slow: { delay: 100, updateSkip: 1 },
     };
 
     const { delay, updateSkip } = speedOptions[speed];
-    try {
-      await algorithmMap[selectedAlgorithm](
-        [...array],
-        (newArray) => setArray(newArray),
-        (indices) => setHighlightedIndices(indices),
-        0,
-        1,
-        setSwapCount,
-        setSortTime,
-        setArrayAccesses,
-        setComparisonCount,
-        signal,
-      );
-      setIsSorted(() => (signal.aborted ? false : true));
-    } catch (error) {
-      console.error("Sorting error:", error);
-    }
-    setIsSorted(false);
     try {
       await algorithmMap[selectedAlgorithm](
         [...array],
@@ -126,7 +166,7 @@ const SortVisualizer = () => {
         setSortTime,
         setArrayAccesses,
         setComparisonCount,
-        signal,
+        signal
       );
       setIsSorted(() => (signal.aborted ? false : true));
     } catch (error) {
@@ -136,125 +176,173 @@ const SortVisualizer = () => {
   }, [array, selectedAlgorithm, speed]);
 
   return (
-    <div className="flex flex-col items-center gap-6 p-6 bg-black min-h-screen text-gray-200">
+    <div className="flex flex-col items-center gap-1 p-1 bg-black min-h-screen text-gray-200">
       <div className="text-center">
-        <h3 className="text-4xl font-extrabold bg-gradient-to-r from-blue-500 to-gray-500 text-transparent bg-clip-text drop-shadow-lg">
+        <h3 className="text-4xl font-extrabold bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text drop-shadow-[0_0_8px_#CA00B6] animate-pulse-slow">
           {title}
         </h3>
       </div>
-      <div className="flex flex-row items-center w-full gap-2">
-        {/* Bars Container */}
-        <div
-          className="flex justify-center items-end w-full max-w-5xl overflow-hidden bg-black"
-          style={{ height: "250px" }}
-        >
-          {array.map((value, index) => (
-            <div
-              key={index}
-              className={`flex-1 transition-all duration-300 ease-in-out ${
-                isSorted
-                  ? "bg-green-500"
-                  : highlightedIndices.includes(index)
-                  ? "bg-[#ff6347] shadow-[0_0_10px_rgba(255,99,71,0.6)] border-2 border-[#d63a3a] rounded-[5px]"
-                  : "bg-blue-500"
-              }`}
-              style={{
-                height: `${value / 1.5}%`,
-                margin: "0 0.2px",
-              }}
-            ></div>
-          ))}
-        </div>
-        {/* Stats Section */}
-        <div className="flex flex-col items-center gap-2 bg-black border p-4 rounded-lg shadow-lg max-w-xl">
-          <h5 className="text-lg font-bold">Sorting Stats</h5>
-          <div className="text-sm">
-            <p>
-              Array Accesses:{" "}
-              <span className="text-blue-400">{arrayAccesses}</span>
-            </p>
-            <p>
-              Element Swaps: <span className="text-green-400">{swapCount}</span>
-            </p>
-            <p>
-              Time Elapsed:{" "}
-              <span className="text-yellow-400">{sortTime.toFixed(2)} ms</span>
-            </p>
-            <p>
-              Comparisons:{" "}
-              <span className="text-purple-400">{comparisonCount}</span>
-            </p>
+
+      <div className="flex flex-col lg:flex-row w-full gap-1 max-w-7xl">
+        <div className="flex-1 bg-black rounded-xl shadow-xl overflow-hidden p-1 border border-gray-800">
+          <div
+            className="flex justify-center items-end w-full h-64 bg-gray-900/50 rounded-lg"
+            style={{ height: "350px" }}
+          >
+            {array.map((value, index) => (
+              <div
+                key={index}
+                className={`flex-1 transition-all duration-300 ease-in-out ${
+                  isSorted
+                    ? "bg-gradient-to-t from-green-400 to-green-600 shadow-[0_0_15px_rgba(74,222,128,0.7)]"
+                    : highlightedIndices.includes(index)
+                    ? "bg-gradient-to-t  from-blue-400 to-blue-600 shadow-[0_0_15px_rgba(244,63,94,0.7)] border border-rose-400"
+                    : "bg-gradient-to-t  from-rose-500 to-rose-700"
+                }`}
+                style={{
+                  height: `${value / 1.5}%`,
+                  margin: arrayLength < 1000 ? "0 0.5px" : "0 0.1px",
+                }}
+              />
+            ))}
+          </div>
+
+          <div className="grid grid-cols-2 gap-1 max-w-7xl">
+            <div className="flex flex-col justify-center items-center gap-4 bg-black p-1 rounded-xl shadow-lg border border-gray-800">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button
+                  onClick={generateRandomArray}
+                  className={`bg-blue-400 hover:bg-blue-300 text-white py-3 px-6 rounded-lg shadow-lg transition-all ${
+                    isSorting
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:shadow-[0_0_15px_#3b82f6]"
+                  }`}
+                  disabled={isSorting}
+                >
+                  Generate Array
+                </button>
+                <button
+                  onClick={startSorting}
+                  className={`bg-purple-600 hover:bg-purple-500 text-white py-3 px-6 rounded-lg shadow-lg transition-all ${
+                    isSorting
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:shadow-[0_0_15px_#CA00B6]"
+                  }`}
+                  disabled={isSorting}
+                >
+                  Start Sorting
+                </button>
+                <button
+                  onClick={resetArray}
+                  className="bg-rose-600 hover:bg-rose-500 text-white py-3 px-6 rounded-lg shadow-lg transition-all hover:shadow-[0_0_15px_#f43f5e]"
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-black p-1 rounded-xl shadow-lg border border-gray-800">
+              <div className="flex flex-col gap-1">
+                <label className="text-gray-300 text-sm">Speed:</label>
+                <select
+                  className="bg-gray-800 text-white p-2 rounded-lg border border-gray-700 focus:ring-2 focus:ring-purple-500"
+                  value={speed}
+                  onChange={handleSpeedChange}
+                  disabled={isSorting}
+                >
+                  <option value="Fast">Fast</option>
+                  <option value="Intermediate">Medium</option>
+                  <option value="Slow">Slow</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-gray-300 text-sm">Size:</label>
+                <select
+                  className="bg-gray-800 text-white p-2 rounded-lg border border-gray-700 focus:ring-2 focus:ring-purple-500"
+                  onChange={handleSizeChange}
+                  value={arrayLength}
+                  disabled={isSorting}
+                >
+                  <option value={100}>100 Elements</option>
+                  <option value={500}>500 Elements</option>
+                  <option value={1000}>1000 Elements</option>
+                  <option value={2000}>2000 Elements</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-gray-300 text-sm">Algorithm:</label>
+                <select
+                  className="bg-gray-800 text-white p-2 rounded-lg border border-gray-700 focus:ring-2 focus:ring-purple-500"
+                  value={selectedAlgorithm}
+                  onChange={handleAlgorithmChange}
+                  disabled={isSorting}
+                >
+                  {Object.keys(algorithmMap).map((name) => (
+                    <option key={name} value={name}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      {/* Controls Section */}
-      <div className="flex flex-wrap gap-4 justify-center">
-        <div className="flex flex-col items-center gap-2 bg-black p-4 rounded-lg shadow-lg max-w-xl">
-          <button
-            onClick={generateRandomArray}
-            className={`bg-blue-600 text-white py-2 px-4 rounded shadow-lg hover:bg-blue-500 transition ${
-              isSorting ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-            disabled={isSorting}
-          >
-            Generate Array
-          </button>
-          <button
-            onClick={startSorting}
-            className={`bg-green-600 text-white py-2 px-4 rounded shadow-lg hover:bg-green-500 transition ${
-              isSorting ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-            disabled={isSorting}
-          >
-            Start Sorting
-          </button>
 
-          <button
-            onClick={resetArray}
-            className="bg-red-600 text-white py-2 px-4 rounded shadow-lg hover:bg-red-500 transition"
-          >
-            Reset
-          </button>
-        </div>
-        <div className="flex flex-col items-center gap-2 bg-black p-4 rounded-lg shadow-lg max-w-xl">
-          {/* Speed Selection */}
-          <select
-            className="bg-gray-800 text-white py-2 px-4 rounded shadow-lg"
-            value={speed}
-            onChange={handleSpeedChange}
-            disabled={isSorting}
-          >
-            <option value="Fast">Fast</option>
-            <option value="Intermediate">Intermediate</option>
-            <option value="Slow">Slow</option>
-          </select>
+        <div className="flex flex-col gap-4 bg-black border border-gray-800 p-6 rounded-xl shadow-lg w-full lg:w-80">
+          <h4 className="text-xl font-bold text-center text-blue-400 drop-shadow-[0_0_8px_#80BCFF] animate-pulse-slow">
+            Sorting Stats
+          </h4>
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <span className="text-gray-300">Array Accesses:</span>
+              <span className="text-blue-400 font-medium">{arrayAccesses}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-gray-300">Element Swaps:</span>
+              <span className="text-green-400 font-medium">{swapCount}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-gray-300">Comparisons:</span>
+              <span className="text-purple-400 font-medium">
+                {comparisonCount}
+              </span>
+            </div>
+          </div>
 
-          {/* Size Selection */}
-          <select
-            className="bg-gray-800 text-white py-2 px-4 rounded shadow-lg"
-            onChange={handleSizeChange}
-            value={arrayLength}
-            disabled={isSorting}
-          >
-            <option value={2000}>2000 Elements</option>
-            <option value={1000}>1000 Elements</option>
-            <option value={500}>500 Elements</option>
-            <option value={100}>100 Elements</option>
-          </select>
-
-          {/* Algorithm Selection */}
-          <select
-            className="bg-gray-800 text-white py-2 px-4 rounded shadow-lg"
-            value={selectedAlgorithm}
-            onChange={handleAlgorithmChange}
-            disabled={isSorting}
-          >
-            {Object.keys(algorithmMap).map((name) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
+          <div className="mt-4 p-4 bg-gray-800/50 rounded-xl border border-gray-700 backdrop-blur-sm">
+            <div className="flex items-center gap-2 mb-2">
+              <svg
+                className="w-5 h-5 text-purple-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+              </svg>
+              <h3 className="text-lg font-medium text-purple-400">
+                {selectedAlgorithm}
+              </h3>
+            </div>
+            <p className="text-gray-300 text-sm">
+              {algorithmDescriptions[selectedAlgorithm]
+                .trim()
+                .split("\n")
+                .filter((line) => line)
+                .map((line, i) => (
+                  <li key={i} className="flex items-start">
+                    <span className="text-teal-400 mr-2">▹</span>
+                    <span>{line.replace("->", "").trim()}</span>
+                  </li>
+                ))}
+            </p>
+          </div>
         </div>
       </div>
     </div>

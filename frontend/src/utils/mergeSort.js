@@ -27,7 +27,7 @@ const mergeSort = async (
         console.log("Sorting aborted");
         return; 
       }
-      highlightIndices([leftStartIndex + i, leftStartIndex + left.length + j]); // Highlight current comparison
+      highlightIndices([leftStartIndex + i, leftStartIndex + left.length + j]); 
 
       comparisonCount++;
       setComparisonCount(comparisonCount);

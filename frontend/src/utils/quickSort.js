@@ -26,32 +26,32 @@ const quickSort = async (
   const partition = async (arr, low, high) => {
     
     const pivot = arr[high];
-    arrayAccessCount++; // Accessing pivot
+    arrayAccessCount++; 
     let i = low - 1;
 
     for (let j = low; j < high; j++) {
       if (signal.aborted) {
         console.log("Sorting aborted");
-        return; // Exit the function if aborted
+        return; 
       }
-      highlightIndices([j, high]); // Highlight current pair
+      highlightIndices([j, high]); 
 
-      // Count the comparison
+      
       comparisonCount++;
       setComparisonCount(comparisonCount);
 
-      // Count array accesses for arr[j] and arr[high] during the comparison
+      
       arrayAccessCount += 2;
       setArrayAccesses(arrayAccessCount);
 
       if (arr[j] <= pivot) {
         i++;
-        // Swap elements
+        
         [arr[i], arr[j]] = [arr[j], arr[i]];
         swapCount++;
         setSwapCount(swapCount);
 
-        // Count array accesses for the swap (arr[i] and arr[j] are accessed twice, for reading and writing)
+        
         arrayAccessCount += 4;
         setArrayAccesses(arrayAccessCount);
 
@@ -61,19 +61,19 @@ const quickSort = async (
         }
       }
 
-      // Throttling update
+      
       if ((i * arr.length + j) % updateSkip === 0) {
         updateArray([...arr]);
         await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }
 
-    // Final swap (arr[i+1] and arr[high])
+    
     [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
     swapCount++;
     setSwapCount(swapCount);
 
-    // Count array accesses for the swap
+    
     arrayAccessCount += 4;
     setArrayAccesses(arrayAccessCount);
 
@@ -83,7 +83,7 @@ const quickSort = async (
   await quickSortHelper(array, 0, array.length - 1);
   highlightIndices([-1, -1]);
   setSortTime(performance.now() - start);
-  setSwapCount(swapCount); // Set final swap count
+  setSwapCount(swapCount); 
 };
 
 export default quickSort;

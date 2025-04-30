@@ -14,35 +14,35 @@ const insertionSort = async (
   let arrayAccess = 0;
 
   const tempArray = [...array];
-  let updateCounter = 0; // Counter to control throttling
+  let updateCounter = 0; 
 
   for (let i = 1; i < tempArray.length; i++) {
     if (signal.aborted) {
       console.log("Sorting aborted");
-      return; // Exit the function if aborted
+      return; 
     }
     let key = tempArray[i];
     let j = i - 1;
 
-    // Comparisons for inserting the key
+    
     comparisonCount++;
     setComparisonCount(comparisonCount);
 
-    // Highlight the key being compared
+    
     highlightIndices([j, j + 1]);
 
-    // Shift elements of the sorted portion of the array
+    
     while (j >= 0 && tempArray[j] > key) {
       comparisonCount++;
       setComparisonCount(comparisonCount);
 
-      arrayAccess += 2; // Accessing tempArray[j] and tempArray[j + 1] for comparison
+      arrayAccess += 2; 
       setArrayAccesses(arrayAccess);
 
       tempArray[j + 1] = tempArray[j];
       j--;
 
-      // Increment the update counter and throttle updates
+      
       updateCounter++;
       if (updateCounter % updateSkip === 0) {
         updateArray([...tempArray]);
@@ -50,17 +50,17 @@ const insertionSort = async (
       }
     }
 
-    // Insert the key in the correct position
+    
     tempArray[j + 1] = key;
-    arrayAccess++; // Accessing the key for insertion
+    arrayAccess++; 
     setArrayAccesses(arrayAccess);
 
-    // Ensure the final update for this pass
+    
     updateArray([...tempArray]);
     await new Promise((resolve) => setTimeout(resolve, delay));
   }
 
-  highlightIndices([-1, -1]); // Clear highlights
+  highlightIndices([-1, -1]); 
   setSortTime(performance.now() - start);
 };
 

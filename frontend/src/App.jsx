@@ -5,9 +5,10 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
-import SortVisualizer from "./pages/SortVisualizer"; 
+import SortVisualizer from "./pages/SortVisualizer";
 import CurveFitVisualization from "./pages/CurveFitVisualization";
- 
+import MainPage from "./pages/MainPage";
+import PathfindVisualizer from "./pages/PathFindVisualizer";
 
 function Logout() {
   localStorage.clear();
@@ -24,30 +25,18 @@ function App() {
     <HashRouter>
       <Routes>
         <Route
-          path="/fit-visualizer"
-          element={
-            <ProtectedRoute>
-              <CurveFitVisualization />
-            </ProtectedRoute>
-          }
-        />
-        
-        <Route 
-          path="/sort-visualizer"
-          element={
-            <ProtectedRoute>
-              <SortVisualizer />
-            </ProtectedRoute>
-          }
-          /> 
-          <Route
           path="/"
           element={
             <ProtectedRoute>
               <Home />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<MainPage />} />
+          <Route path="sort-visualizer" element={<SortVisualizer />} />
+          <Route path="fit-visualizer" element={<CurveFitVisualization />} />
+          <Route path="pathfind-visualizer" element={<PathfindVisualizer />} />
+        </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<RegisterAndLogout />} />

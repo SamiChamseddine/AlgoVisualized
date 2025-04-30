@@ -1,93 +1,107 @@
+import { Link, useLocation } from "react-router-dom";
 import React, { useState } from "react";
 
-const Navbar = ({ onSelect }) => {
-  const [active, setActive] = useState("home");
+const Navbar = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
-  const handleClick = (visualizer) => {
-    setActive(visualizer);
-    onSelect(visualizer); 
-  };
+  const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="bg-gray-800 text-white">
+    <nav className="bg-black border-b border-gray-800 text-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo and Title */}
           <div className="flex items-center space-x-3">
             <img
               src="/icon/algoVisualized.webp"
               alt="AlgoVisualized Icon"
-              className="h-16 w-16 object-contain rounded-lg shadow-lg border-2 border-blue-500"
+              className="h-12 w-12 object-contain rounded-lg border-2 transition-all border-purple-300 shadow-[0_0_15px_#CA00B6] animate-pulse-slow"
             />
-
-            <a href="/" className="text-2xl font-bold text-blue-400">
+            <Link 
+              to="/" 
+              className="text-2xl font-extrabold bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text drop-shadow-[0_0_8px_#CA00B6] animate-pulse-slow"
+            >
               AlgoVisualized
-            </a>
+            </Link>
           </div>
 
-          {/* Links (Desktop) */}
-          <div className="hidden md:flex space-x-4">
-            <a
-              href="#"
-              onClick={() => handleClick("home")}
-              className={`px-3 py-2 rounded-md text-sm font-medium ${
-                active === "home" ? "bg-gray-700" : "hover:bg-gray-700"
+          <div className="hidden md:flex space-x-1">
+            <Link
+              to="/"
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                isActive("/") 
+                  ? "bg-purple-600 text-white shadow-[0_0_10px_#CA00B6]" 
+                  : "text-gray-300 hover:bg-gray-800 hover:text-white"
               }`}
             >
               Home
-            </a>
-            <a
-              href="#"
-              onClick={() => handleClick("sort")}
-              className={`px-3 py-2 rounded-md text-sm font-medium ${
-                active === "sort" ? "bg-gray-700" : "hover:bg-gray-700"
+            </Link>
+            <Link
+              to="/sort-visualizer"
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                isActive("/sort-visualizer") 
+                  ? "bg-purple-600 text-white shadow-[0_0_10px_#CA00B6]" 
+                  : "text-gray-300 hover:bg-gray-800 hover:text-white"
               }`}
             >
-              Sort Visualizer
-            </a>
-            <a
-              href="#"
-              onClick={() => handleClick("curve")}
-              className={`px-3 py-2 rounded-md text-sm font-medium ${
-                active === "curve" ? "bg-gray-700" : "hover:bg-gray-700"
+              Sorting
+            </Link>
+            <Link
+              to="/fit-visualizer"
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                isActive("/fit-visualizer") 
+                  ? "bg-purple-600 text-white shadow-[0_0_10px_#CA00B6]" 
+                  : "text-gray-300 hover:bg-gray-800 hover:text-white"
               }`}
             >
-              Curve Fit Visualizer
-            </a>
-            <a
-              href="#"
-              onClick={() => handleClick("pathFind")}
-              className={`px-3 py-2 rounded-md text-sm font-medium ${
-                active === "pathFind" ? "bg-gray-700" : "hover:bg-gray-700"
+              Curve Fitting
+            </Link>
+            <Link
+              to="/pathfind-visualizer"
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                isActive("/pathfind-visualizer") 
+                  ? "bg-purple-600 text-white shadow-[0_0_10px_#CA00B6]" 
+                  : "text-gray-300 hover:bg-gray-800 hover:text-white"
               }`}
             >
-              Path Find Visualizer
-            </a>
+              Path Finding
+            </Link>
           </div>
 
-          {/* Mobile Menu Button */}
           <div className="md:hidden">
             <button
-              type="button"
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none transition-all"
             >
-              <svg
-                className="h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16m-7 6h7"
-                />
-              </svg>
             </button>
           </div>
+        </div>
+      </div>
+
+      <div className={`md:hidden ${isMobileMenuOpen ? 'block' : 'hidden'} bg-gray-900/95 backdrop-blur-sm border-t border-gray-800`}>
+        <div className="px-2 pt-2 pb-3 space-y-1">
+          <Link
+            to="/"
+            className={`block px-4 py-3 rounded-lg text-base font-medium mx-2 transition-all ${
+              isActive("/") 
+                ? "bg-purple-600 text-white shadow-[0_0_10px_#CA00B6]" 
+                : "text-gray-300 hover:bg-gray-800 hover:text-white"
+            }`}
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Home
+          </Link>
+          <Link
+            to="/sort-visualizer"
+            className={`block px-4 py-3 rounded-lg text-base font-medium mx-2 transition-all ${
+              isActive("/sort-visualizer") 
+                ? "bg-purple-600 text-white shadow-[0_0_10px_#CA00B6]" 
+                : "text-gray-300 hover:bg-gray-800 hover:text-white"
+            }`}
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Sort Visualizer
+          </Link>
         </div>
       </div>
     </nav>

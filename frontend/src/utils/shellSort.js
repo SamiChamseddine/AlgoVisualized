@@ -14,27 +14,27 @@ const shellSort = async (
   let gap = Math.floor(tempArray.length / 2);
   let comparisonCount = 0;
   let arrayAccess = 0;
-  let updateCounter = 0; // Counter to track the number of updates
+  let updateCounter = 0; 
 
   while (gap > 0) {
     for (let i = gap; i < tempArray.length; i++) {
       if (signal.aborted) {
         console.log("Sorting aborted");
-        return; // Exit the function if aborted
+        return; 
       }
       const temp = tempArray[i];
       let j = i;
 
       while (j >= gap && tempArray[j - gap] > temp) {
-        highlightIndices([j, j - gap]); // Highlight comparison
+        highlightIndices([j, j - gap]); 
         comparisonCount++;
         setComparisonCount(comparisonCount);
         tempArray[j] = tempArray[j - gap];
-        arrayAccess += 2; // 2 accesses per swap (tempArray[j] and tempArray[j - gap])
+        arrayAccess += 2; 
         setArrayAccesses(arrayAccess);
         j -= gap;
 
-        // Throttle updates after a certain number of movements
+        
         updateCounter++;
         if (updateCounter % updateSkip === 0) {
           updateArray([...tempArray]);
@@ -42,17 +42,17 @@ const shellSort = async (
         }
       }
       tempArray[j] = temp;
-      arrayAccess++; // Access for the assignment tempArray[j] = temp
+      arrayAccess++; 
 
-      // Ensure an update after each insertion
+      
       updateCounter++;
       if (updateCounter % updateSkip === 0) {
         updateArray([...tempArray]);
         await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }
-    gap = Math.floor(gap / 2); // Reduce the gap size
+    gap = Math.floor(gap / 2); 
   }
-  highlightIndices([-1, -1]); // Clear highlights
+  highlightIndices([-1, -1]); 
 };
 export default shellSort;

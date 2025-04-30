@@ -2,99 +2,19 @@ import asyncio
 import random
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from .utils.bubble_sort import bubble_sort
-from .utils.selection_sort import selection_sort
-from .utils.insertion_sort import insertion_sort
-from .utils.merge_sort import merge_sort
-from .utils.quick_sort import quick_sort
-from .utils.heap_sort import heap_sort
-from .utils.radix_sort import radix_sort
 from .utils.polynomial_fit import polynomial_fit
+
+
+
 import numpy as np
 from scipy.optimize import curve_fit
-
-class SortingConsumer(AsyncWebsocketConsumer):
-    async def connect(self):
-        await self.accept()
-        self.array = []  # Initialize the array as empty
-        self.originalArray = []
-        self.sorting_task = None  # Task to keep track of the sorting process
-
-    async def disconnect(self, close_code):
-        print(f"Disconnected with code: {close_code}")
-        if self.sorting_task and not self.sorting_task.done():
-            self.sorting_task.cancel()
-
-    async def receive(self, text_data):
-        data = json.loads(text_data)
-
-        if "action" in data:
-            if data["action"] == "generate_array":
-                size = data["size"]
-                self.array = [random.randint(1, 200) for _ in range(int(size))]
-                self.originalArray = self.array[:]
-                await self.send(json.dumps({"array": self.array}))
-
-            elif data["action"] == "reset":
-                # Cancel the current sorting task if running
-                if self.sorting_task and not self.sorting_task.done():
-                    self.sorting_task.cancel()
-                    self.sorting_task = None
-                self.array = self.originalArray[:]
-                await self.send(json.dumps({"reset": "reset", "array": self.originalArray}))
-
-            elif data["action"] == "sort_array":
-                # Perform sorting algorithm and send each step while sorting
-                algorithm = data.get("algorithm")
-                delay = data.get("delay")
-                throttle = data.get("throttle")
-
-                # Cancel any ongoing sorting process before starting a new one
-                if self.sorting_task and not self.sorting_task.done():
-                    self.sorting_task.cancel()
-
-                # Start the new sorting process
-                self.sorting_task = asyncio.create_task(self.perform_sort(self.array, algorithm, delay, throttle))
-
-    async def perform_sort(self, arr, algorithm, delay, throttle):
-        algorithms = {
-            "bubble_sort": bubble_sort,
-            "selection_sort": selection_sort,
-            "insertion_sort": insertion_sort,
-            "merge_sort": merge_sort,
-            "quick_sort": quick_sort,
-            "heap_sort": heap_sort,
-            "radix_sort": radix_sort,
-            # "shell_sort": shell_sort,
-            # "counting_sort": counting_sort,
-        }
-        sort_function = algorithms.get(algorithm)
-        if sort_function:
-            try:
-                await sort_function(arr, self.send_sort_data, delay, throttle)
-                await self.send(json.dumps({"isSorted": True}))
-            except asyncio.CancelledError:
-                # Handle cancellation gracefully
-                await self.send(json.dumps({"message": "Sorting process cancelled"}))
-
-    async def send_sort_data(self, arr, comparisons, arrayAccesses, swaps, highlightedIndices):
-        # Send the current state of the array to the frontend
-        await self.send(json.dumps({
-            "array": arr[:],
-            "comparisons": comparisons,
-            "arrayAccesses": arrayAccesses,
-            "swaps": swaps,
-            "highlightedIndices": highlightedIndices,
-        }))
-
-
 
 class FittingConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         await self.accept()
-        self.dataset = {"x": [], "y": []}  
-        self.fitting_task = None          
-        self.fitting_result = None        
+        self.dataset = {"x": [], "y": []}
+        self.fitting_task = None
+        self.fitting_result = None
 
     async def disconnect(self, close_code):
         print(f"Disconnected with code: {close_code}")
@@ -106,23 +26,38 @@ class FittingConsumer(AsyncWebsocketConsumer):
 
         if "action" in data:
             if data["action"] == "generate_dataset":
+                function_type = data.get("function_type", "sin")
                 x = np.linspace(0, 100, 50)
-                y = 20 * np.sin(np.pi * 0.04 * x) + np.random.rand(50) * 10
+
+                if function_type == "sin":
+                    y = 20 * np.sin(np.pi * 0.04 * x) + np.random.rand(50) * 10
+                elif function_type == "linear":
+                    y = 2 * x + 10 + np.random.normal(0, 5, size=len(x))
+                elif function_type == "quadratic":
+                    y = 0.05 * x**2 - 3 * x + 20 + np.random.normal(0, 10, size=len(x))
+                elif function_type == "exponential":
+                    y = 10 * np.exp(0.03 * x) + np.random.normal(0, 20, size=len(x))
+                elif function_type == "logarithmic":
+                    y = 10 * np.log(x + 1) + np.random.normal(0, 2, size=len(x))
+                else:
+                    await self.send(json.dumps({"error": f"Unknown function type: {function_type}"}))
+                    return
+
                 self.dataset = {"x": x.tolist(), "y": y.tolist()}
-                print(f"dataset: {self.dataset}")
-                await self.send(json.dumps({
-                    "dataset": self.dataset,
-                }))
+                await self.send(json.dumps({"dataset": self.dataset}))
+
 
             elif data["action"] == "start_fitting":
                 method = data.get("method")
-                degree = data.get("degree", 1)  
+                degree = data.get("degree", 1)
                 delay = data.get("delay", 0.1)
 
                 if self.fitting_task and not self.fitting_task.done():
                     self.fitting_task.cancel()
                 print(f"method: {method}")
-                self.fitting_task = asyncio.create_task(self.perform_fit(self.dataset, method, degree, delay))
+                self.fitting_task = asyncio.create_task(
+                    self.perform_fit(self.dataset, method, degree, delay)
+                )
 
             elif data["action"] == "reset":
                 if self.fitting_task and not self.fitting_task.done():
@@ -143,22 +78,35 @@ class FittingConsumer(AsyncWebsocketConsumer):
             return
 
         try:
-            final_coefficients = await fit_function(dataset, degree, self.send_fit_data, delay)
-            
+            final_coefficients = await fit_function(
+                dataset, degree, self.send_fit_data, delay
+            )
+
             if final_coefficients is not None:
-                self.fitting_result = final_coefficients  
-                await self.send(json.dumps({"isFitted": True, "coefficients": final_coefficients.tolist()}))
+                self.fitting_result = final_coefficients
+                await self.send(
+                    json.dumps(
+                        {"isFitted": True, "coefficients": final_coefficients.tolist()}
+                    )
+                )
             else:
-                await self.send(json.dumps({"error": "Fitting process failed, no coefficients returned"}))
+                await self.send(
+                    json.dumps(
+                        {"error": "Fitting process failed, no coefficients returned"}
+                    )
+                )
 
         except asyncio.CancelledError:
             await self.send(json.dumps({"message": "Fitting process cancelled"}))
 
-
     async def send_fit_data(self, progress, coefficients, mse, r_squared):
-        await self.send(json.dumps({
-            "progress": progress,
-            "coefficients": coefficients,
-            "mse": mse,
-            "r_squared": r_squared,
-        }))
+        await self.send(
+            json.dumps(
+                {
+                    "progress": progress,
+                    "coefficients": coefficients,
+                    "mse": mse,
+                    "r_squared": r_squared,
+                }
+            )
+        )

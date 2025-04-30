@@ -13,7 +13,7 @@ async def polynomial_fit(dataset, degree, send_fn, delay=0.1, throttle=1):
     """
     x = np.array(dataset["x"])
     y = np.array(dataset["y"])
-    n = len(x)
+    n = len(x)  
     progress = 0
 
     X = np.vander(x, degree + 1)

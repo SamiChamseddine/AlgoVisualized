@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const images = [
   {
     type: "sort",
-    link: "/icon/sortVisualizer.webp",
+    link: "/icon/algo.png",
     description:
       "Visualize how different sorting algorithms work in real-time. " +
       "Understand the inner workings of algorithms like Bubble Sort, Merge Sort, " +
@@ -13,12 +13,20 @@ const images = [
   },
   {
     type: "fit",
-    link: "/icon/curveVisualizer.webp",
+    link: "/icon/algo.png",
     description:
       "Visualize fitting how curve fitting works. " +
-      "Examine algorithms like linear regression, polynomial fitting, " +
-      "and other curve approximation methods.",
+      "Examine polynomial fitting with different degrees for curve approximation.",
     title: "Fit Visualizer",
+  },
+  {
+    type: "find",
+    link: "/icon/algo.png",
+    description:
+      "Visualize how pathfinding algorithms explore graphs. " +
+      "Discover techniques like BFS, Dijkstra's, " +
+      "and Nearest/Farthest Insertion to find paths or and solve TPS.",
+    title: "Path Finding",
   },
 ];
 
@@ -28,16 +36,26 @@ const MainPage = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % images.length);
-    }, 5000); // Change slide every 5 seconds
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
-
+  const getCurrentPath = () => {
+    const type = images[currentImage].type;
+    switch (type) {
+      case "sort":
+        return "/sort-visualizer";
+      case "fit":
+        return "/fit-visualizer";
+      case "find":
+        return "/pathfind-visualizer";
+      default:
+        return "/";
+    }
+  };
   return (
-    <div className="flex flex-col items-center min-h-screen bg-black text-gray-200">
-      {/* Hero Section */}
-      <div className="relative flex flex-col items-center justify-center border rounded-md border-black h-screen w-4/5 pt-  bg-gradient-to-r from-blue-900 to-gray-900 overflow-hidden">
-        {/* Slideshow Container */}
+    <div className="flex flex-col items-center gap-1 p-1 bg-black h-screen text-gray-200">
+      <div className="relative flex flex-col items-center justify-center border border-gray-800 rounded-xl h-screen w-full max-w-7xl bg-gradient-to-r from-gray-900/50 to-gray-900/70 overflow-hidden shadow-xl">
         <div className="absolute inset-0">
           {images.map((image, index) => (
             <div
@@ -49,21 +67,14 @@ const MainPage = () => {
               <img
                 src={image.link}
                 alt={`Background ${index}`}
-                className="w-full h-full object-cover"
-                style={{
-                  maskImage:
-                    "linear-gradient(to left, transparent 0%, gray 100%)",
-                  WebkitMaskImage:
-                    "linear-gradient(to left, transparent 0%, gray 100%)",
-                }}
+                className="w-full h-full object-contain"
               />
-              <div className="absolute inset-0 bg-black bg-opacity-50" />
+              <div className="absolute inset-0 bg-black bg-opacity-70" />
             </div>
           ))}
         </div>
 
-        {/* Content Overlay */}
-        <div className="text-center">
+        <div className="text-center z-10">
           {images.map((image, index) => (
             <div
               key={index}
@@ -71,15 +82,16 @@ const MainPage = () => {
                 currentImage === index ? "opacity-100" : "opacity-0"
               }`}
             >
-              <h1 className="text-6xl font-extrabold mb-4 bg-gradient-to-r from-blue-500 to-gray-500 text-transparent bg-clip-text">
+              <h1 className="text-6xl font-extrabold mb-4 bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text drop-shadow-[0_0_8px_#CA00B6] animate-pulse-slow">
                 {image.title}
               </h1>
-              <p className="text-lg text-gray-300 max-w-2xl mb-8 px-4">
+              <p className="text-lg text-gray-300 max-w-2xl mb-8 px-4 backdrop-blur-sm bg-gray-900/50 p-4 rounded-xl border border-gray-800">
                 {image.description}
               </p>
+              <p>{image.type}</p>
               <Link
-                to="/visualizer"
-                className="bg-blue-600 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-blue-500 transition duration-300"
+                to={getCurrentPath()}
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white py-3 px-6 rounded-lg shadow-lg transition-all hover:shadow-[0_0_15px_#CA00B6]"
               >
                 Get Started
               </Link>
@@ -88,47 +100,8 @@ const MainPage = () => {
         </div>
       </div>
 
-      {/* Features Section */}
-      <div className="w-full py-16 bg-black">
-        <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-blue-500 to-gray-500 text-transparent bg-clip-text">
-            Features
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-              <h3 className="text-2xl font-semibold mb-4">
-                Interactive Visualizations
-              </h3>
-              <p className="text-gray-300">
-                Watch sorting algorithms in action with real-time animations and
-                step-by-step explanations.
-              </p>
-            </div>
-            <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-              <h3 className="text-2xl font-semibold mb-4">
-                Multiple Algorithms
-              </h3>
-              <p className="text-gray-300">
-                Explore a variety of sorting algorithms, including Bubble Sort,
-                Merge Sort, Quick Sort, and more.
-              </p>
-            </div>
-            <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-              <h3 className="text-2xl font-semibold mb-4">
-                Customizable Settings
-              </h3>
-              <p className="text-gray-300">
-                Adjust array size, sorting speed, and choose different
-                algorithms to see how they perform.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <footer className="w-full py-8 bg-gray-900">
-        <div className="max-w-6xl mx-auto px-4 text-center">
+      <footer className="w-full bg-gray-900/50 border-t border-gray-800 mt-auto py-4 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-4 text-center">
           <p className="text-gray-300">
             &copy; {new Date().getFullYear()} AlgoVisualized. All rights
             reserved.

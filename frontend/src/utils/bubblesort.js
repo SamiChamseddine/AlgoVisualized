@@ -8,7 +8,7 @@ const bubbleSort = async (
   setSortTime,
   setArrayAccesses,
   setComparisonCount,
-  signal // Pass the AbortSignal here
+  signal 
 ) => {
   const start = performance.now();
   let swapCount = 0;
@@ -17,17 +17,17 @@ const bubbleSort = async (
   const tempArray = [...array];
 
   for (let i = 0; i < tempArray.length; i++) {
-    // Check if the sorting process has been aborted
+    
     if (signal.aborted) {
       console.log("Sorting aborted");
-      return; // Exit the function if aborted
+      return; 
     }
 
     for (let j = 0; j < tempArray.length - i - 1; j++) {
-      // Check if the sorting process has been aborted
+      
       if (signal.aborted) {
         console.log("Sorting aborted");
-        return; // Exit the function if aborted
+        return; 
       }
 
       highlightIndices([j, j + 1]);
@@ -41,7 +41,7 @@ const bubbleSort = async (
         setSwapCount(swapCount);
       }
 
-      // Update the array and add delay
+      
       if (((i * tempArray.length + j) % updateSkip === 0) & (delay != 0)) {
         updateArray([...tempArray]);
         await new Promise((resolve) => setTimeout(resolve, delay));
@@ -49,7 +49,7 @@ const bubbleSort = async (
     }
   }
 
-  // Reset highlighted indices and set final sort time
+  
   highlightIndices([-1, -1]);
   if (delay === 0) setSortTime(performance.now() - start);
 };
